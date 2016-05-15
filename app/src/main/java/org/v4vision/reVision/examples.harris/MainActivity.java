@@ -202,7 +202,7 @@ public class MainActivity extends Activity implements Camera.PreviewCallback, Su
         {//update FPS on the screen every 0.5 sec
             double RenderScriptFPS = 1e9/frameDurationAverRenderScript;
             FPSLabel.setText(
-                String.format("%dx%d: %4.1f FPS (RenderScript: %4.1f FPS)", imageWidth, imageHeight, AverFPS, RenderScriptFPS)
+                String.format("%dx%d: %4.3f FPS (RenderScript: %4.3f FPS)", imageWidth, imageHeight, AverFPS, RenderScriptFPS)
             );
             FPSDuration = 0;
         }
