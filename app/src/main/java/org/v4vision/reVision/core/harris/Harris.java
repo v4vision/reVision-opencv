@@ -1,11 +1,13 @@
 package org.v4vision.reVision.core.harris;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -25,19 +27,13 @@ public class Harris {
     }
 
     public Bitmap process() {
-        Mat har = new Mat();
-        Mat norm = new Mat();
-        Mat norm_abs = new Mat();
-        Imgproc.cornerHarris(in, har, 2, 3, 0.04);
-        Core.normalize(har, norm, 0, 255, Core.NORM_MINMAX, CvType.CV_32FC1, new Mat());
-        Core.convertScaleAbs(norm, norm_abs);
+        MatOfPoint corners = new MatOfPoint();
+        Imgproc.goodFeaturesToTrack(in, corners, 200, 0.1, 11, new Mat(), 3, true, 0.04);
 
-        for(int i=0;i<har.height();i++) {
-            for(int j=0; j<har.width();j++) {
-                if(norm_abs.get(i, j)[0] > 200) {
-                    Imgproc.circle(orig, new Point(j,i), 6, new Scalar(0, 255, 0));
-                }
-            }
+        Point[] cornerArray = corners.toArray();
+
+        for(int i = 0; i < cornerArray.length; i++) {
+            Imgproc.circle(orig, cornerArray[i], 2, new Scalar(0, 255, 0));
         }
 
         outBitmap = Bitmap.createBitmap(orig.cols(), orig.rows(), Bitmap.Config.ARGB_8888);
