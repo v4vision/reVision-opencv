@@ -26,14 +26,16 @@ public class Harris {
 
     public Bitmap process() {
         Mat har = new Mat();
+        Mat norm = new Mat();
+        Mat norm_abs = new Mat();
         Imgproc.cornerHarris(in, har, 2, 3, 0.04);
-        Core.normalize(har, har, 0, 255, Core.NORM_MINMAX, CvType.CV_32FC1, new Mat());
-        Core.convertScaleAbs(har, har);
+        Core.normalize(har, norm, 0, 255, Core.NORM_MINMAX, CvType.CV_32FC1, new Mat());
+        Core.convertScaleAbs(norm, norm_abs);
 
         for(int i=0;i<har.height();i++) {
             for(int j=0; j<har.width();j++) {
-                if(har.get(i, j)[0] > 200) {
-                    Imgproc.circle(orig, new Point(j,i), 6, new Scalar(255,0,0));
+                if(norm_abs.get(i, j)[0] > 200) {
+                    Imgproc.circle(orig, new Point(j,i), 6, new Scalar(0, 255, 0));
                 }
             }
         }
